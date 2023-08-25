@@ -3,20 +3,19 @@ package jm.task.core.jdbc.dao;
 import jm.task.core.jdbc.model.User;
 import jm.task.core.jdbc.util.Util;
 
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
+import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
 public class UserDaoJDBCImpl implements UserDao {
 
+    static Connection connection = Util.getConnection();
 
     public void createUsersTable() {
 
-        try {
-            PreparedStatement preparedStatement = Util.getConnection().prepareStatement("CREATE TABLE `my_db`.`users` (`id` INT NOT NULL AUTO_INCREMENT, `name` VARCHAR(45) NOT NULL, `lastName` VARCHAR(45) NOT NULL, `age` INT(3) NOT NULL, PRIMARY KEY (`id`)) ENGINE = InnoDB DEFAULT CHARACTER SET = utf8;");
+        String SQL = "CREATE TABLE `users` (`id` INT NOT NULL AUTO_INCREMENT, `name` VARCHAR(45) NOT NULL, `lastName` VARCHAR(45) NOT NULL, `age` INT(3) NOT NULL, PRIMARY KEY (`id`)) ENGINE = InnoDB DEFAULT CHARACTER SET = utf8;";
+        try (PreparedStatement preparedStatement = connection.prepareStatement(SQL)) {
+            //PreparedStatement preparedStatement = connection.prepareStatement("CREATE TABLE `users` (`id` INT NOT NULL AUTO_INCREMENT, `name` VARCHAR(45) NOT NULL, `lastName` VARCHAR(45) NOT NULL, `age` INT(3) NOT NULL, PRIMARY KEY (`id`)) ENGINE = InnoDB DEFAULT CHARACTER SET = utf8;");
             preparedStatement.executeUpdate();
         } catch (SQLException e) {
             throw new RuntimeException(e);
@@ -25,8 +24,9 @@ public class UserDaoJDBCImpl implements UserDao {
     }
 
     public void dropUsersTable() {
-        try {
-            PreparedStatement preparedStatement = Util.getConnection().prepareStatement("DROP TABLE IF EXISTS users;");
+        String SQL = "DROP TABLE IF EXISTS users;";
+        try (PreparedStatement preparedStatement = connection.prepareStatement(SQL)) {
+            //PreparedStatement preparedStatement = connection.prepareStatement("DROP TABLE IF EXISTS users;");
             preparedStatement.executeUpdate();
         } catch (SQLException e) {
             throw new RuntimeException(e);
@@ -35,13 +35,15 @@ public class UserDaoJDBCImpl implements UserDao {
     }
 
     public void saveUser(String name, String lastName, byte age) {
-        try {
-            PreparedStatement statement = Util.getConnection().prepareStatement("INSERT INTO users (name, lastName, age) VALUES (?, ?, ?)");
-            statement.setString(1, name);
-            statement.setString(2, lastName);
-            statement.setByte(3, age);
-            statement.executeUpdate();
-            statement.close();
+
+        String SQL  = "INSERT INTO users (name, lastName, age) VALUES (?, ?, ?)";
+
+        try (PreparedStatement preparedStatement = connection.prepareStatement(SQL)) {
+            //PreparedStatement statement = connection.prepareStatement("INSERT INTO users (name, lastName, age) VALUES (?, ?, ?)");
+            preparedStatement.setString(1, name);
+            preparedStatement.setString(2, lastName);
+            preparedStatement.setByte(3, age);
+            preparedStatement.executeUpdate();
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
@@ -49,8 +51,10 @@ public class UserDaoJDBCImpl implements UserDao {
     }
 
     public void removeUserById(long id) {
-        try {
-            PreparedStatement preparedStatement = Util.getConnection().prepareStatement("DELETE FROM users WHERE id = ?");
+
+        String SQL = "DELETE FROM users WHERE id = ?";
+        try (PreparedStatement preparedStatement = connection.prepareStatement(SQL)) {
+            //PreparedStatement preparedStatement = connection.prepareStatement("DELETE FROM users WHERE id = ?");
             preparedStatement.setLong(1, id);
             preparedStatement.executeUpdate();
         } catch (SQLException e) {
@@ -62,32 +66,28 @@ public class UserDaoJDBCImpl implements UserDao {
     public List<User> getAllUsers() {
         List<User> users = new ArrayList<>();
 
-        Statement statement;
+        String SQL = "SELECT * FROM users";
 
-        {
-            try {
-                statement = Util.getConnection().createStatement();
-                String SQL = "SELECT * FROM users";
-                ResultSet resultSet = statement.executeQuery(SQL);
-                while (resultSet.next()) {
-                    User user = new User();
-                    user.setId(resultSet.getLong("id"));
-                    user.setName(resultSet.getString("name"));
-                    user.setLastName(resultSet.getString("lastName"));
-                    user.setAge(resultSet.getByte("age"));
-                    users.add(user);
-                }
-            } catch (SQLException e) {
-                throw new RuntimeException(e);
+        try (PreparedStatement preparedStatement = connection.prepareStatement(SQL)) {
+            ResultSet resultSet = preparedStatement.executeQuery(SQL);
+            while (resultSet.next()) {
+                User user = new User();
+                user.setId(resultSet.getLong("id"));
+                user.setName(resultSet.getString("name"));
+                user.setLastName(resultSet.getString("lastName"));
+                user.setAge(resultSet.getByte("age"));
+                users.add(user);
             }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
         }
         return users;
     }
 
     public void cleanUsersTable() {
-
-        try {
-            PreparedStatement preparedStatement = Util.getConnection().prepareStatement("DELETE FROM users");
+        String SQL = "DELETE FROM users";
+        try (PreparedStatement preparedStatement = connection.prepareStatement(SQL)) {
+            //PreparedStatement preparedStatement = connection.prepareStatement("DELETE FROM users");
             preparedStatement.executeUpdate();
         } catch (SQLException e) {
             throw new RuntimeException(e);
