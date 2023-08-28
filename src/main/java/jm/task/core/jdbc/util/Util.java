@@ -16,7 +16,6 @@ public class Util {
         try {
             if (connection == null) {
                 connection = DriverManager.getConnection(DB_URL, DB_USERNAME, DB_PASSWORD);
-                System.out.println("Connection OK!");
             }
 
 
