@@ -1,3 +1,4 @@
+/*
 package jm.task.core.jdbc.dao;
 
 import jm.task.core.jdbc.model.User;
@@ -15,7 +16,6 @@ public class UserDaoJDBCImpl implements UserDao {
 
         String SQL = "CREATE TABLE `users` (`id` INT NOT NULL AUTO_INCREMENT, `name` VARCHAR(45) NOT NULL, `lastName` VARCHAR(45) NOT NULL, `age` INT(3) NOT NULL, PRIMARY KEY (`id`)) ENGINE = InnoDB DEFAULT CHARACTER SET = utf8;";
         try (PreparedStatement preparedStatement = connection.prepareStatement(SQL)) {
-            //PreparedStatement preparedStatement = connection.prepareStatement("CREATE TABLE `users` (`id` INT NOT NULL AUTO_INCREMENT, `name` VARCHAR(45) NOT NULL, `lastName` VARCHAR(45) NOT NULL, `age` INT(3) NOT NULL, PRIMARY KEY (`id`)) ENGINE = InnoDB DEFAULT CHARACTER SET = utf8;");
             preparedStatement.executeUpdate();
         } catch (SQLException e) {
             throw new RuntimeException(e);
@@ -26,7 +26,6 @@ public class UserDaoJDBCImpl implements UserDao {
     public void dropUsersTable() {
         String SQL = "DROP TABLE IF EXISTS users;";
         try (PreparedStatement preparedStatement = connection.prepareStatement(SQL)) {
-            //PreparedStatement preparedStatement = connection.prepareStatement("DROP TABLE IF EXISTS users;");
             preparedStatement.executeUpdate();
         } catch (SQLException e) {
             throw new RuntimeException(e);
@@ -39,7 +38,6 @@ public class UserDaoJDBCImpl implements UserDao {
         String SQL  = "INSERT INTO users (name, lastName, age) VALUES (?, ?, ?)";
 
         try (PreparedStatement preparedStatement = connection.prepareStatement(SQL)) {
-            //PreparedStatement statement = connection.prepareStatement("INSERT INTO users (name, lastName, age) VALUES (?, ?, ?)");
             preparedStatement.setString(1, name);
             preparedStatement.setString(2, lastName);
             preparedStatement.setByte(3, age);
@@ -54,7 +52,6 @@ public class UserDaoJDBCImpl implements UserDao {
 
         String SQL = "DELETE FROM users WHERE id = ?";
         try (PreparedStatement preparedStatement = connection.prepareStatement(SQL)) {
-            //PreparedStatement preparedStatement = connection.prepareStatement("DELETE FROM users WHERE id = ?");
             preparedStatement.setLong(1, id);
             preparedStatement.executeUpdate();
         } catch (SQLException e) {
@@ -87,10 +84,10 @@ public class UserDaoJDBCImpl implements UserDao {
     public void cleanUsersTable() {
         String SQL = "DELETE FROM users";
         try (PreparedStatement preparedStatement = connection.prepareStatement(SQL)) {
-            //PreparedStatement preparedStatement = connection.prepareStatement("DELETE FROM users");
             preparedStatement.executeUpdate();
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
     }
 }
+*/
