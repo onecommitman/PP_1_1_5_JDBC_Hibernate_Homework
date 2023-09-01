@@ -19,7 +19,7 @@ import java.util.Map;
 import java.util.Properties;
 
 public class Util {
-    private static final String DB_URL = "jdbc:mysql://localhost:3306/my_db";
+    private static final String DB_URL = "jdbc:mysql://localhost:3306/my_db?useSSL=false";
     private static final String DB_USERNAME = "bestuser";
     private static final String DB_PASSWORD = "bestuser";
 
@@ -65,9 +65,9 @@ public class Util {
                 Properties settings = new Properties();
 
                 settings.put(Environment.DRIVER, "com.mysql.cj.jdbc.Driver");
-                settings.put(Environment.URL, "jdbc:mysql://localhost:3306/my_db?useSSL=false");
-                settings.put(Environment.USER, "bestuser");
-                settings.put(Environment.PASS, "bestuser");
+                settings.put(Environment.URL, DB_URL);
+                settings.put(Environment.USER, DB_USERNAME);
+                settings.put(Environment.PASS, DB_PASSWORD);
                 settings.put(Environment.DIALECT, "org.hibernate.dialect.MySQL5Dialect");
 
                 settings.put(Environment.SHOW_SQL, "true");
